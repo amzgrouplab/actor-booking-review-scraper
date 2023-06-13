@@ -19,15 +19,15 @@ const { log } = Apify.utils;
 
 async function sendSlackMessage(webhookUrl, message) {
     try {
-      const response = await axios.post(webhookUrl, {
-        text: message,
-      });
-      log.info('Slack message sent successfully');
-      log.info(response.data);
+        const response = await axios.post(webhookUrl, {
+            text: message,
+        });
+        log.info('Slack message sent successfully');
+        log.info(response.data);
     } catch (error) {
-      console.error('Error sending Slack message:', error);
+        console.error('Error sending Slack message:', error);
     }
-  }
+}
 
 module.exports.handleDetailPage = async (context, globalContext) => {
     const {
@@ -81,13 +81,13 @@ module.exports.handleDetailPage = async (context, globalContext) => {
         const userReviews = previewReviews.slice(0, store.state.maxReviews);
         //Send message to the slack channel
         // Example usage
-        const webhookUrl = 'https://hooks.slack.com/services/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';
-        const message = userReviews;
+       // const webhookUrl = 'https://hooks.slack.com/services/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';
+        //const message = userReviews;
         log.info("**********************************************message");
         log.info(message);
-        sendSlackMessage(webhookUrl, message);
+       // sendSlackMessage(webhookUrl, message);
 
-        await Apify.pushData({userReviews});
+        await Apify.pushData({ userReviews });
     }
 };
 

@@ -91,11 +91,11 @@ module.exports.sliceReviews = (detailPagename, reviewsCount) => {
     log.info("*****************************************undatedReviews");
     log.info(updatedReviews);
 
-    const webhookUrl = 'https://hooks.slack.com/services/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';
-    const message = updatedReviews;
+    //const webhookUrl = 'https://hooks.slack.com/services/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';
+   // const message = updatedReviews;
     log.info("**********************************************message");
     log.info(updatedReviews);
-    sendSlackMessage(webhookUrl, message);
+    //sendSlackMessage(webhookUrl, message);
 
     store.setPath(`details.${detailPagename}.userReviews`, updatedReviews);
 };
