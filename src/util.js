@@ -314,8 +314,7 @@ module.exports.validateProxy = (page, session, startUrls, requiredQueryParam) =>
 
 module.exports.saveDetailIfComplete = async (detailPagename) => {
     const store = GlobalStore.summon();
-    log.info("**********************************************detailPagename");
-log.info(detailPagename);
+
     if (store.state.reviewPagesToProcess[detailPagename].length === 0) {
         sliceReviews(detailPagename, store.state.maxReviews);
 

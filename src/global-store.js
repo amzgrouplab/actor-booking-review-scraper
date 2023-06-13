@@ -1,19 +1,5 @@
 const { GlobalStore } = require('apify-global-store');
-const axios = require('axios');
 const { REVIEWS_ON_DETAIL_PAGE, REVIEWS_RESULTS_PER_REQUEST } = require('./consts');
-
-
-async function sendSlackMessage(webhookUrl, message) {
-    try {
-        const response = await axios.post(webhookUrl, {
-            text: message,
-        });
-        log.info('Slack message sent successfully');
-        log.info(response.data);
-    } catch (error) {
-        console.error('Error sending Slack message:', error);
-    }
-}
 
 module.exports.initializeGlobalStore = async (maxPages, maxReviews) => {
     let reviewsRoundedUpToPages = maxReviews;
@@ -88,14 +74,6 @@ module.exports.sliceReviews = (detailPagename, reviewsCount) => {
     const detailReviews = detail.userReviews || [];
 
     const updatedReviews = detailReviews.slice(0, reviewsCount);
-    log.info("*****************************************undatedReviews");
-    log.info(updatedReviews);
-
-    //const webhookUrl = 'https://hooks.slack.com/services/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';
-   // const message = updatedReviews;
-    log.info("**********************************************message");
-    log.info(updatedReviews);
-    //sendSlackMessage(webhookUrl, message);
 
     store.setPath(`details.${detailPagename}.userReviews`, updatedReviews);
 };
