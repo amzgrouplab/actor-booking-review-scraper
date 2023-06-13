@@ -188,8 +188,6 @@ module.exports.extractPreviewReviews = (html, scrapeReviewerName) => {
     // regex.exec(string) needs to be used instead of string.match(regex) to make capturing group work properly
     const matches = EXPORTED_VARS_REGEX.exec(html);
     const exportedVarsMatch = matches ? matches[1] : '';
-    console.log("*************************html*****************************git ");
-    console.log(html);
     const context = { exportedVars: {} };
     vm.createContext(context);
 
@@ -200,7 +198,6 @@ module.exports.extractPreviewReviews = (html, scrapeReviewerName) => {
     vm.runInContext(jsonParseCode, context);
 
     const { exportedVars } = context;
-
     const { fe_featured_reviews: featuredReviews } = exportedVars;
     const parsedReviews = featuredReviews ? parsePreviewReviews(featuredReviews) : [];
 

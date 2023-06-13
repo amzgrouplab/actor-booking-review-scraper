@@ -5,6 +5,7 @@
 	"dependencies": {
 		"apify": "^2.2.1",
 		"apify-global-store": "^1.1.3",
+		"axios": "^1.4.0",
 		"moment": "^2.29.1",
 		"puppeteer": "^10.4.0",
 		"underscore": "^1.13.2",
@@ -24,6 +25,6 @@
 	"license": "ISC",
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:dtrungtin/actor-booking-scraper.git"
+		"url": "https://github.com/amzgrouplab/actor-booking-review-scraper.git"
 	}
 }
