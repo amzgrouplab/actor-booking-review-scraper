@@ -206,7 +206,8 @@ module.exports.extractPreviewReviews = (html, scrapeReviewerName) => {
     if (!scrapeReviewerName) {
         parsedReviews.forEach((review) => delete review.guestName);
     }
-
+    console.log("*************************parsedReviews*****************************");
+    console.log(parsedReviews);
     return parsedReviews;
 };
 
