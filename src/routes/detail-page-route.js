@@ -22,8 +22,8 @@ async function sendSlackMessage(webhookUrl, message) {
       const response = await axios.post(webhookUrl, {
         text: message,
       });
-      console.log('Slack message sent successfully');
-      console.log(response.data);
+      log.info('Slack message sent successfully');
+      log.info(response.data);
     } catch (error) {
       console.error('Error sending Slack message:', error);
     }
@@ -76,15 +76,15 @@ module.exports.handleDetailPage = async (context, globalContext) => {
         const store = GlobalStore.summon();
 
         const previewReviews = extractPreviewReviews(html, scrapeReviewerName);
-        console.log("**********************************************previewReviews");
-        console.log(previewReviews);
+        log.info("**********************************************previewReviews");
+        log.info(previewReviews);
         const userReviews = previewReviews.slice(0, store.state.maxReviews);
         //Send message to the slack channel
         // Example usage
         const webhookUrl = 'https://hooks.slack.com/services/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';
         const message = userReviews;
-        console.log("**********************************************message");
-        console.log(message);
+        log.info("**********************************************message");
+        log.info(message);
         sendSlackMessage(webhookUrl, message);
 
         await Apify.pushData({userReviews});
