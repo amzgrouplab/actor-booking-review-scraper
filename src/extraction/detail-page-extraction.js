@@ -175,8 +175,10 @@ const extractCategoryReviews = async (page) => {
 };
 const sendSlackMessage = async (webhookUrl, message) => {
     try {
-        const webhook = new IncomingWebhook(webhookUrl);
-        webhook.send({ text: message });
+        await IncomingWebhook.send({
+            text: message,
+            url: webhookUrl
+        });
         console.log('Slack message sent successfully.');
     } catch (error) {
         console.error('Error sending Slack message:', error);
