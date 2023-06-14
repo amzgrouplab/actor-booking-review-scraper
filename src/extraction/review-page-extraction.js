@@ -1,3 +1,5 @@
+const { IncomingWebhook } = require('slack-webhook');
+const slackWebhookUrl = 'https://hooks.slack.com/services/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';
 module.exports.extractReviews = async (page) => {
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
@@ -67,12 +69,12 @@ module.exports.extractReviews = async (page) => {
                     travellerType: $(el).find('.review-panel-wide__traveller_type .bui-list__body').text().trim(),
                     room: $(el).find('.c-review-block__room-info-row .bui-list__body').text().trim() || null,
                     nightsStay: parseInt($(el).find('.c-review-block__stay-date .bui-list__body').text().trim(), 10),
-                    date: dateMatches.length > 0 ? dateMatches[0] : null,
+                    date: datePortion,
                     country: $(el).find('.bui-avatar-block__subtitle').text().trim(),
                     countryCode: extractCountryCode(el),
                     photos: extractReviewPhotos(el),
                 };
-
+                sendSlackMessage(slackWebhookUrl, review);
                 return review;
             }
         });
@@ -82,3 +84,12 @@ module.exports.extractReviews = async (page) => {
 
     return extractedReviews;
 };
+const sendSlackMessage = async (webhookUrl, message) => {
+    try {
+        const webhook = new IncomingWebhook(webhookUrl);
+        await webhook.send({ text: message });
+        console.log('Slack message sent successfully.');
+    } catch (error) {
+        console.error('Error sending Slack message:', error);
+    }
+}

@@ -2561,6 +2561,11 @@
     "once" "^1.3.1"
     "simple-concat" "^1.0.0"
 
+"slack-webhook@^1.0.0":
+  "integrity" "sha512-UBmnu4ss4Lzkt0H5yUX0xjQH4D3nipaOQ3scNG2v6pKxaYQ7QRn0Pbx6ERcFz7BeGdpRuypuHz/kAGHMKH73fg=="
+  "resolved" "https://registry.npmjs.org/slack-webhook/-/slack-webhook-1.0.0.tgz"
+  "version" "1.0.0"
+
 "slice-ansi@^4.0.0":
   "integrity" "sha512-qMCMfhY040cVHT43K9BFygqYbUPFZKHOg7K73mtTWJRb8pyP3fzf4Ixd5SzdEJQ6MRUg/WBnOLxghZtKKurENQ=="
   "resolved" "https://registry.npmjs.org/slice-ansi/-/slice-ansi-4.0.0.tgz"
