@@ -1,3 +1,5 @@
+const Apify = require('apify');
+const { log } = Apify.utils;
 module.exports.extractReviews = async (page) => {
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
@@ -43,22 +45,24 @@ module.exports.extractReviews = async (page) => {
         };
 
         const reviewBlocks = $('.c-review-block');
-
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 15);
-
         const reviews = $.map(reviewBlocks, (el) => {
+            // const dateMatches = $(el).find('.c-review-block__date').text().trim()
+            //     .match(/([\d]{1,2}(.)+[\d]{4})/gi);
             const dateMatches = $(el).find('.c-review-block__date').text();
             const datePortion = dateMatches.split(': ')[1]; // Extract the date portion after the colon
             const dateObject = new Date(Date.parse(datePortion));
-
-            // Check if the review's date is within the desired date range
+            log.info('************reviewBlocks', {reviewBlocks});
             if (dateObject >= yesterday && dateObject <= today) {
+                log.info('************DATE', {yesterday});
+            
                 const reviewTexts = extractReviewTexts(el);
 
                 const review = {
-                    title: $(el).find('.c-review-block__title').first().text().trim() || null,
+                    title: $(el).find('.c-review-block__title').first().text()
+                        .trim() || null,
                     score: parseFloat($(el).find('.bui-review-score__badge').text().trim()) || null,
                     ...reviewTexts,
                     guestName: $(el).find('.bui-avatar-block__title').text().trim(),
@@ -73,9 +77,9 @@ module.exports.extractReviews = async (page) => {
 
                 return review;
             }
+        });
 
-            return null; // Skip reviews outside the desired date range
-        }).filter((review) => review !== null); // Filter out null values
+        return reviews;
     });
 
     return extractedReviews;
