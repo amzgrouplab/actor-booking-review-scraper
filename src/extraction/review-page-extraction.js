@@ -1,9 +1,9 @@
 const { IncomingWebhook } = require('slack-webhook');
-const slackWebhookUrl = 'https://hooks.slack.com/services/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';
+
 module.exports.extractReviews = async (page) => {
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
-
+        const slackWebhookUrl = 'https://hooks.slack.com/services/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';
         const extractReviewTexts = (reviewElement) => {
             const reviewTextElements = $(reviewElement).find('.c-review__inner--ltr');
 
