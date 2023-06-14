@@ -2,7 +2,9 @@ const vm = require('vm');
 const Puppeteer = require('puppeteer'); // eslint-disable-line
 const { getAttribute, addUrlParameters } = require('../util');
 const { EXPORTED_VARS_REGEX } = require('../consts');
-
+const { IncomingWebhook } = require('slack-webhook');
+const Apify = require('apify');
+const { log } = Apify.utils;
 /**
  * Extracts information from the detail page.
  * @param {Puppeteer.Page} page - The Puppeteer page object.
@@ -23,14 +25,17 @@ module.exports.extractDetail = async (page, ld, input, userData) => {
         country: addressCountry,
         region: addressRegion,
     };
-
+    const slackWebhookUrl = 'https://hooks.slack.com/services/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';
+                      
     const checkInFrom = await page.$$eval('#checkin_policy [data-from]',
         (el) => (el.length > 0 ? el[0].getAttribute('data-from') : null));
     const checkInTo = await page.$$eval('#checkin_policy [data-until]',
         (el) => (el.length > 0 ? el[0].getAttribute('data-until') : null));
 
     const rooms = await extractRoomsInfo(page, input);
-
+    const reviews = await extractReviewsCount(page, aggregateRating);
+    sendSlackMessage(slackWebhookUrl, reviews);
+    log.info('Slack message : ', reviews);
     return {
         order: userData.order,
         url: addUrlParameters(page.url().split('?')[0], input),
@@ -40,7 +45,7 @@ module.exports.extractDetail = async (page, ld, input, userData) => {
         stars: (await page.$$('.hp__hotel_ratings__stars svg')).length || null,
         price: rooms.length > 0 ? rooms[0].price : null,
         rating: await extractRating(page, aggregateRating),
-        reviews: await extractReviewsCount(page, aggregateRating),
+        reviews,
         breakfast: await extractBreakfast(page),
         checkInFrom,
         checkInTo,
@@ -168,7 +173,15 @@ const extractCategoryReviews = async (page) => {
 
     return categoryReviews;
 };
-
+const sendSlackMessage = async (webhookUrl, message) => {
+    try {
+        const webhook = new IncomingWebhook(webhookUrl);
+        webhook.send({ text: message });
+        console.log('Slack message sent successfully.');
+    } catch (error) {
+        console.error('Error sending Slack message:', error);
+    }
+}  
 const extractRoomsInfo = async (page, { checkIn, checkOut }) => {
     if (checkIn && checkOut) {
         return page.evaluate(extractDetailedRoomsInfo);

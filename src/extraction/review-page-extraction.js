@@ -1,9 +1,6 @@
-const { IncomingWebhook } = require('slack-webhook');
-
 module.exports.extractReviews = async (page) => {
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
-        const slackWebhookUrl = 'https://hooks.slack.com/services/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';
         const extractReviewTexts = (reviewElement) => {
             const reviewTextElements = $(reviewElement).find('.c-review__inner--ltr');
 
@@ -28,16 +25,6 @@ module.exports.extractReviews = async (page) => {
 
             return reviewTexts;
         };
-        
-        const sendSlackMessage = (webhookUrl, message) => {
-            try {
-                const webhook = new IncomingWebhook(webhookUrl);
-                webhook.send({ text: message });
-                console.log('Slack message sent successfully.');
-            } catch (error) {
-                console.error('Error sending Slack message:', error);
-            }
-        }
 
         const extractReviewPhotos = (reviewElement) => {
             const LARGE_PHOTO_ATTRIBUTE = 'data-photos-large-src';
@@ -61,7 +48,7 @@ module.exports.extractReviews = async (page) => {
         const reviews = $.map(reviewBlocks, (el) => {
             // const dateMatches = $(el).find('.c-review-block__date').text().trim()
             //     .match(/([\d]{1,2}(.)+[\d]{4})/gi);
-            const dateMatches = $(el).find('.c-review-block__date').text();
+            const dateMatches = $(el).find('.c-review-block__date').text().trim();
             const datePortion = dateMatches.split(': ')[1]; // Extract the date portion after the colon
             const dateObject = new Date(Date.parse(datePortion));
             console.log(reviewBlocks);
@@ -84,7 +71,6 @@ module.exports.extractReviews = async (page) => {
                     countryCode: extractCountryCode(el),
                     photos: extractReviewPhotos(el),
                 };
-                sendSlackMessage(slackWebhookUrl, review);
                 return review;
             }
         });
