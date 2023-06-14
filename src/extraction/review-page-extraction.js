@@ -28,6 +28,16 @@ module.exports.extractReviews = async (page) => {
 
             return reviewTexts;
         };
+        
+        const sendSlackMessage = (webhookUrl, message) => {
+            try {
+                const webhook = new IncomingWebhook(webhookUrl);
+                webhook.send({ text: message });
+                console.log('Slack message sent successfully.');
+            } catch (error) {
+                console.error('Error sending Slack message:', error);
+            }
+        }
 
         const extractReviewPhotos = (reviewElement) => {
             const LARGE_PHOTO_ATTRIBUTE = 'data-photos-large-src';
@@ -84,12 +94,3 @@ module.exports.extractReviews = async (page) => {
 
     return extractedReviews;
 };
-const sendSlackMessage = async (webhookUrl, message) => {
-    try {
-        const webhook = new IncomingWebhook(webhookUrl);
-        await webhook.send({ text: message });
-        console.log('Slack message sent successfully.');
-    } catch (error) {
-        console.error('Error sending Slack message:', error);
-    }
-}
