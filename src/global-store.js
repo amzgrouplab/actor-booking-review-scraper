@@ -1,4 +1,5 @@
 const { GlobalStore } = require('apify-global-store');
+const Apify = require('apify');
 const { REVIEWS_ON_DETAIL_PAGE, REVIEWS_RESULTS_PER_REQUEST } = require('./consts');
 const { log } = Apify.utils;
 module.exports.initializeGlobalStore = async (maxPages, maxReviews) => {
