@@ -1,5 +1,3 @@
-const Apify = require('apify');
-const { log } = Apify.utils;
 module.exports.extractReviews = async (page) => {
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
@@ -54,9 +52,9 @@ module.exports.extractReviews = async (page) => {
             const dateMatches = $(el).find('.c-review-block__date').text();
             const datePortion = dateMatches.split(': ')[1]; // Extract the date portion after the colon
             const dateObject = new Date(Date.parse(datePortion));
-            log.info('************reviewBlocks', {reviewBlocks});
+            console.log(reviewBlocks);
             if (dateObject >= yesterday && dateObject <= today) {
-                log.info('************DATE', {yesterday});
+                console.log('************DATE'+ yesterday );
             
                 const reviewTexts = extractReviewTexts(el);
 
