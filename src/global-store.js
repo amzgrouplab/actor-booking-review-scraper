@@ -1,6 +1,6 @@
 const { GlobalStore } = require('apify-global-store');
 const { REVIEWS_ON_DETAIL_PAGE, REVIEWS_RESULTS_PER_REQUEST } = require('./consts');
-
+const { log } = Apify.utils;
 module.exports.initializeGlobalStore = async (maxPages, maxReviews) => {
     let reviewsRoundedUpToPages = maxReviews;
 
@@ -58,6 +58,8 @@ module.exports.addReviews = (detailPagename, reviews) => {
 
     const detail = store.state.details[detailPagename];
     const detailReviews = detail.userReviews || [];
+    log.info('detailReviews...', { detailReviews });
+    log.info('addReviews...', { reviews });
 
     const updatedReviews = [
         ...detailReviews,
@@ -71,9 +73,11 @@ module.exports.sliceReviews = (detailPagename, reviewsCount) => {
     const store = GlobalStore.summon();
 
     const detail = store.state.details[detailPagename];
+    log.info('detail...', { detail });
     const detailReviews = detail.userReviews || [];
-
+    log.info('detailReviews...', { detailReviews });
     const updatedReviews = detailReviews.slice(0, reviewsCount);
+    log.info('updatedReviews...', { updatedReviews });
 
     store.setPath(`details.${detailPagename}.userReviews`, updatedReviews);
 };
