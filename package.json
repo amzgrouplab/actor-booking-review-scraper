@@ -8,7 +8,6 @@
 		"axios": "^1.4.0",
 		"moment": "^2.29.1",
 		"puppeteer": "^10.4.0",
-		"slack-webhook": "^1.0.0",
 		"underscore": "^1.13.2",
 		"yarn": "^1.22.19"
 	},

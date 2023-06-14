@@ -2,7 +2,7 @@ const vm = require('vm');
 const Puppeteer = require('puppeteer'); // eslint-disable-line
 const { getAttribute, addUrlParameters } = require('../util');
 const { EXPORTED_VARS_REGEX } = require('../consts');
-const { IncomingWebhook } = require('slack-webhook');
+const axios = require('axios');
 const Apify = require('apify');
 const { log } = Apify.utils;
 /**
@@ -175,10 +175,7 @@ const extractCategoryReviews = async (page) => {
 };
 const sendSlackMessage = async (webhookUrl, message) => {
     try {
-        await IncomingWebhook.send({
-            text: message,
-            url: webhookUrl
-        });
+        await axios.post(webhookUrl, { text: message });
         console.log('Slack message sent successfully.');
     } catch (error) {
         console.error('Error sending Slack message:', error);
