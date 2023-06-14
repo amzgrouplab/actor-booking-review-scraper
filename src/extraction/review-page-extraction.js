@@ -43,31 +43,39 @@ module.exports.extractReviews = async (page) => {
         };
 
         const reviewBlocks = $('.c-review-block');
+
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 15);
+
         const reviews = $.map(reviewBlocks, (el) => {
-            const dateMatches = $(el).find('.c-review-block__date').text().trim()
-                .match(/([\d]{1,2}(.)+[\d]{4})/gi);
+            const dateMatches = $(el).find('.c-review-block__date').text();
+            const datePortion = dateMatches.split(': ')[1]; // Extract the date portion after the colon
+            const dateObject = new Date(Date.parse(datePortion));
 
-            const reviewTexts = extractReviewTexts(el);
+            // Check if the review's date is within the desired date range
+            if (dateObject >= yesterday && dateObject <= today) {
+                const reviewTexts = extractReviewTexts(el);
 
-            const review = {
-                title: $(el).find('.c-review-block__title').first().text()
-                    .trim() || null,
-                score: parseFloat($(el).find('.bui-review-score__badge').text().trim()) || null,
-                ...reviewTexts,
-                guestName: $(el).find('.bui-avatar-block__title').text().trim(),
-                travellerType: $(el).find('.review-panel-wide__traveller_type .bui-list__body').text().trim(),
-                room: $(el).find('.c-review-block__room-info-row .bui-list__body').text().trim() || null,
-                nightsStay: parseInt($(el).find('.c-review-block__stay-date .bui-list__body').text().trim(), 10),
-                date: dateMatches.length > 0 ? dateMatches[0] : null,
-                country: $(el).find('.bui-avatar-block__subtitle').text().trim(),
-                countryCode: extractCountryCode(el),
-                photos: extractReviewPhotos(el),
-            };
+                const review = {
+                    title: $(el).find('.c-review-block__title').first().text().trim() || null,
+                    score: parseFloat($(el).find('.bui-review-score__badge').text().trim()) || null,
+                    ...reviewTexts,
+                    guestName: $(el).find('.bui-avatar-block__title').text().trim(),
+                    travellerType: $(el).find('.review-panel-wide__traveller_type .bui-list__body').text().trim(),
+                    room: $(el).find('.c-review-block__room-info-row .bui-list__body').text().trim() || null,
+                    nightsStay: parseInt($(el).find('.c-review-block__stay-date .bui-list__body').text().trim(), 10),
+                    date: dateMatches.length > 0 ? dateMatches[0] : null,
+                    country: $(el).find('.bui-avatar-block__subtitle').text().trim(),
+                    countryCode: extractCountryCode(el),
+                    photos: extractReviewPhotos(el),
+                };
 
-            return review;
-        });
+                return review;
+            }
 
-        return reviews;
+            return null; // Skip reviews outside the desired date range
+        }).filter((review) => review !== null); // Filter out null values
     });
 
     return extractedReviews;
