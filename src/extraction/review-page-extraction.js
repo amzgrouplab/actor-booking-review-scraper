@@ -4,8 +4,8 @@ const Slack = require('@slack/bolt');
 const { log } = Apify.utils;
 
 const slackApp = new Slack.App({
-    signingSecret: process.env.SLACK_SIGNING_SECRET,
-    token: process.env.SLACK_BOT_TOKEN,
+    signingSecret: "501bef0a36af9492d7f8aaaaa5adaed1",
+    token: "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5",
 });
 
 log.info('------------------------')
@@ -90,8 +90,8 @@ module.exports.extractReviews = async (page) => {
                 };
                 
                 slackApp.client.chat.postMessage({
-                    token: process.env.SLACK_BOT_TOKEN,
-                    channel: process.env.SLACK_CHANNEL,
+                    token: "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5",
+                    channel: "project",
                     blocks: [
                         {
                             "type": "section",
