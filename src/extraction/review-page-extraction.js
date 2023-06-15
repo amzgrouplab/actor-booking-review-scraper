@@ -1,4 +1,8 @@
+const axios = require('axios');
+const Apify = require('apify');
+const { log } = Apify.utils;
 module.exports.extractReviews = async (page) => {
+
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
         const extractReviewTexts = (reviewElement) => {
@@ -45,6 +49,15 @@ module.exports.extractReviews = async (page) => {
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 15);
+        const slackWebhookUrl = 'https://hooks.slack.com/services/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';
+        const sendSlackMessage = async (message) => {
+            try {
+                await axios.post(slackWebhookUrl, { text: message });
+                console.log('Slack message sent successfully.');
+            } catch (error) {
+                console.error('Error sending Slack message:', error);
+            }
+        } 
         const reviews = $.map(reviewBlocks, (el) => {
             // const dateMatches = $(el).find('.c-review-block__date').text().trim()
             //     .match(/([\d]{1,2}(.)+[\d]{4})/gi);

@@ -25,7 +25,7 @@ module.exports.extractDetail = async (page, ld, input, userData) => {
         country: addressCountry,
         region: addressRegion,
     };
-    const slackWebhookUrl = 'https://hooks.slack.com/services/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';
+    const slackWebhookUrl = 'https://hooks.slack.com/services/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';
                       
     const checkInFrom = await page.$$eval('#checkin_policy [data-from]',
         (el) => (el.length > 0 ? el[0].getAttribute('data-from') : null));
