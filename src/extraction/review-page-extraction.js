@@ -3,10 +3,7 @@ const dotenv = require('dotenv');
 const Slack = require('@slack/bolt');
 const { log } = Apify.utils;
 
-const slackApp = new Slack.App({
-    signingSecret: "501bef0a36af9492d7f8aaaaa5adaed1",
-    token: "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5",
-});
+
 
 log.info('------------------------')
 
@@ -88,7 +85,10 @@ module.exports.extractReviews = async (page) => {
                     countryCode: extractCountryCode(el),
                     photos: extractReviewPhotos(el),
                 };
-                
+                const slackApp = new Slack.App({
+                    signingSecret: "501bef0a36af9492d7f8aaaaa5adaed1",
+                    token: "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5",
+                });
                 slackApp.client.chat.postMessage({
                     token: "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5",
                     channel: "project",
