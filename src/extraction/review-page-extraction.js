@@ -49,7 +49,7 @@ module.exports.extractReviews = async (page) => {
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 15);
-        const slackWebhookUrl = 'https://hooks.slack.com/services/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';
+        const slackWebhookUrl = 'https://hooks.slack.com/services/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';
         const sendSlackMessage = async (message) => {
             try {
                 await axios.post(slackWebhookUrl, { text: message });
@@ -84,6 +84,21 @@ module.exports.extractReviews = async (page) => {
                     countryCode: extractCountryCode(el),
                     photos: extractReviewPhotos(el),
                 };
+                const message = 'Booking.com Review' +
+                                '\n Date - ' + datePortion +
+                                '\n GuestName - ' + review.guestName +
+                                '\n Score - ' + review.guestName +
+                                '\n Positive - ' + review.positive +
+                                '\n Negative - ' + review.negative;
+                log.info('##############message: ', {message});
+                sendSlackMessage(message);
+                /*
+                Booking.com Review
+                Date : June 13, 2023
+                Guest Name  : Gina
+                Score: 10
+                positive: Sehr saubere Unterkunft, genügend Geschirr/Besteck/Kochutensilien. Ruhige und gepflegte Anlage. das Personal war überaus freundlich und zuvorkommend. Der Whirlpool war sehr angenehm.
+                Negative: null*/
                 return review;
             }
         });
