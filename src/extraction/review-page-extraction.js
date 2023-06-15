@@ -1,8 +1,15 @@
 const axios = require('axios');
 const Apify = require('apify');
+const Slack = require("@slack/bolt");
+const dotenv = require("dotenv");
 const { log } = Apify.utils;
 module.exports.extractReviews = async (page) => {
-
+    dotenv.config();
+    const slackApp = new Slack.App({
+        signingSecret: process.env.SLACK_SIGNING_SECRET,
+        token: process.env.SLACK_BOT_TOKEN,
+    });
+    
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
         const extractReviewTexts = (reviewElement) => {
@@ -49,15 +56,6 @@ module.exports.extractReviews = async (page) => {
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 15);
-        const slackWebhookUrl = 'https://hooks.slack.com/services/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';
-        const sendSlackMessage = async (message) => {
-            try {
-                await axios.post(slackWebhookUrl, { text: message });
-                console.log('Slack message sent successfully.');
-            } catch (error) {
-                console.error('Error sending Slack message:', error);
-            }
-        } 
         const reviews = $.map(reviewBlocks, (el) => {
             // const dateMatches = $(el).find('.c-review-block__date').text().trim()
             //     .match(/([\d]{1,2}(.)+[\d]{4})/gi);
@@ -84,21 +82,25 @@ module.exports.extractReviews = async (page) => {
                     countryCode: extractCountryCode(el),
                     photos: extractReviewPhotos(el),
                 };
-                const message = 'Booking.com Review' +
+                
+                slackApp.client.chat.postMessage({
+                    token: process.env.SLACK_BOT_TOKEN,
+                    channel: process.env.SLACK_CHANNEL,
+                    blocks: [
+                        {
+                            "type": "section",
+                            "text": {
+                                "type": "mrkdwn",
+                                "text": '*Booking.com Review*' +
                                 '\n Date - ' + datePortion +
                                 '\n GuestName - ' + review.guestName +
                                 '\n Score - ' + review.guestName +
                                 '\n Positive - ' + review.positive +
-                                '\n Negative - ' + review.negative;
-                log.info('##############message: ', {message});
-                sendSlackMessage(message);
-                /*
-                Booking.com Review
-                Date : June 13, 2023
-                Guest Name  : Gina
-                Score: 10
-                positive: Sehr saubere Unterkunft, genügend Geschirr/Besteck/Kochutensilien. Ruhige und gepflegte Anlage. das Personal war überaus freundlich und zuvorkommend. Der Whirlpool war sehr angenehm.
-                Negative: null*/
+                                '\n Negative - ' + review.negative,
+                            }
+                        }
+                    ]
+                });
                 return review;
             }
         });

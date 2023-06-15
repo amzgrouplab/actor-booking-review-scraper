@@ -2,9 +2,7 @@ const vm = require('vm');
 const Puppeteer = require('puppeteer'); // eslint-disable-line
 const { getAttribute, addUrlParameters } = require('../util');
 const { EXPORTED_VARS_REGEX } = require('../consts');
-const axios = require('axios');
-const Apify = require('apify');
-const { log } = Apify.utils;
+
 /**
  * Extracts information from the detail page.
  * @param {Puppeteer.Page} page - The Puppeteer page object.
@@ -25,7 +23,6 @@ module.exports.extractDetail = async (page, ld, input, userData) => {
         country: addressCountry,
         region: addressRegion,
     };
-    const slackWebhookUrl = 'https://hooks.slack.com/services/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';
                       
     const checkInFrom = await page.$$eval('#checkin_policy [data-from]',
         (el) => (el.length > 0 ? el[0].getAttribute('data-from') : null));
@@ -34,8 +31,6 @@ module.exports.extractDetail = async (page, ld, input, userData) => {
 
     const rooms = await extractRoomsInfo(page, input);
     const reviews = await extractReviewsCount(page, aggregateRating);
-    sendSlackMessage(slackWebhookUrl, reviews);
-    log.info('Slack message : ', reviews);
     return {
         order: userData.order,
         url: addUrlParameters(page.url().split('?')[0], input),
@@ -173,14 +168,7 @@ const extractCategoryReviews = async (page) => {
 
     return categoryReviews;
 };
-const sendSlackMessage = async (webhookUrl, message) => {
-    try {
-        await axios.post(webhookUrl, { text: message });
-        console.log('Slack message sent successfully.');
-    } catch (error) {
-        console.error('Error sending Slack message:', error);
-    }
-}  
+ 
 const extractRoomsInfo = async (page, { checkIn, checkOut }) => {
     if (checkIn && checkOut) {
         return page.evaluate(extractDetailedRoomsInfo);
