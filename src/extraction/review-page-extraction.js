@@ -1,6 +1,6 @@
 const axios = require('axios');
 const Apify = require('apify');
-const Slack = require('dotenv');
+const dotenv = require('dotenv');
 const Slack = require('@slack/bolt');
 const { log } = Apify.utils;
 module.exports.extractReviews = async (page) => {
