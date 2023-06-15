@@ -1,12 +1,16 @@
-const axios = require('axios');
 const Apify = require('apify');
 const dotenv = require('dotenv');
 const Slack = require('@slack/bolt');
 const { log } = Apify.utils;
 
+const slackApp = new Slack.App({
+    signingSecret: process.env.SLACK_SIGNING_SECRET,
+    token: process.env.SLACK_BOT_TOKEN,
+});
+
 log.info('------------------------')
 
-log.info(Slack);
+log.info(Slack)
 
 log.info('------------------------')
 
@@ -53,10 +57,7 @@ module.exports.extractReviews = async (page) => {
             const countryCode = countryCodeMatches.length > 1 ? countryCodeMatches[1] : null;
             return countryCode;
         };
-        const slackApp = new Slack.App({
-            signingSecret: process.env.SLACK_SIGNING_SECRET,
-            token: process.env.SLACK_BOT_TOKEN,
-        });
+
         const reviewBlocks = $('.c-review-block');
         const today = new Date();
         const yesterday = new Date(today);
