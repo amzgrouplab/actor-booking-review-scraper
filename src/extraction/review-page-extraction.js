@@ -3,6 +3,13 @@ const Apify = require('apify');
 const dotenv = require('dotenv');
 const Slack = require('@slack/bolt');
 const { log } = Apify.utils;
+
+log.info('------------------------')
+
+log.info(Slack);
+
+log.info('------------------------')
+
 module.exports.extractReviews = async (page) => {
     dotenv.config();
     const extractedReviews = await page.evaluate(() => {
