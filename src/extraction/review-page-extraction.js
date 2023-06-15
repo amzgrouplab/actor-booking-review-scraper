@@ -1,15 +1,10 @@
 const axios = require('axios');
 const Apify = require('apify');
-const Slack = require("@slack/bolt");
-const dotenv = require("dotenv");
+import Slack from "@slack/bolt"
+import dotenv from "dotenv"
 const { log } = Apify.utils;
 module.exports.extractReviews = async (page) => {
     dotenv.config();
-    const slackApp = new Slack.App({
-        signingSecret: process.env.SLACK_SIGNING_SECRET,
-        token: process.env.SLACK_BOT_TOKEN,
-    });
-    
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
         const extractReviewTexts = (reviewElement) => {
@@ -51,7 +46,10 @@ module.exports.extractReviews = async (page) => {
             const countryCode = countryCodeMatches.length > 1 ? countryCodeMatches[1] : null;
             return countryCode;
         };
-
+        const slackApp = new Slack.App({
+            signingSecret: process.env.SLACK_SIGNING_SECRET,
+            token: process.env.SLACK_BOT_TOKEN,
+        });
         const reviewBlocks = $('.c-review-block');
         const today = new Date();
         const yesterday = new Date(today);
