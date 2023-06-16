@@ -52,7 +52,7 @@ module.exports.extractReviews = async (page) => {
             const dateMatches = $(el).find('.c-review-block__date').text().trim();
             const datePortion = dateMatches.split(': ')[1]; // Extract the date portion after the colon
             const dateObject = new Date(Date.parse(datePortion));
-            if (dateObject >= yesterday && dateObject <= today) {
+            if (dateObject == yesterday) {
                 const reviewTexts = extractReviewTexts(el);
 
                 const review = {
