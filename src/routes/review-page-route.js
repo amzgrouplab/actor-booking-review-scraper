@@ -70,12 +70,16 @@ module.exports.handleReviewPage = async (context, globalContext) => {
     const slackChannel= "project";
     const color = '#00cc00';
     const slackClient = new WebClient(token);
-    log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$slackClient");
-    log.info(slackClient);
-    let slackMessage = getBaseMessage(slackChannel, reviews, color);
-    log.info(slackMessage);
+    reviews.map((review) => {
+        let slackMessage = getBaseMessage(slackChannel, review, color);
+        log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   review");
+        log.info(review);
+        const res = slackClient.chat.postMessage(slackMessage);
+    });
+    /*let slackMessage = getBaseMessage(slackChannel, reviews, color);
+    log.info(reviews);
     const res = slackClient.chat.postMessage(slackMessage);
-    log.info(res);
+    log.info(res);*/
     
     if (!scrapeReviewerName) {
         reviews = reviews.map((review) => {
