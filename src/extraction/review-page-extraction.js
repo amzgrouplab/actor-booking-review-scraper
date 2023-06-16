@@ -5,7 +5,7 @@ const { WebClient, ChatPostMessageArguments } =  require( '@slack/web-api' );
 
 const getBaseMessage = (slackChannel, review, color = '#0066ff') => ({
     channel: slackChannel,
-    text:  ":white_check_mark: *New review received*",
+    text:  ":white_check_mark: * New review received",
     attachments: [
         {
             color,
@@ -39,7 +39,6 @@ const getBaseMessage = (slackChannel, review, color = '#0066ff') => ({
         },
     ],
 });
-
 
 module.exports.extractReviews = async (page) => {
     dotenv.config();
