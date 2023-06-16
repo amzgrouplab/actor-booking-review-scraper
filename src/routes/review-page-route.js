@@ -70,10 +70,10 @@ module.exports.handleReviewPage = async (context, globalContext) => {
     const slackChannel= "reviews";
     const color = '#00cc00';
     const slackClient = new WebClient(token);
+    log.info("**********************   review   *************************");
+    log.info(review);
     reviews.map((review) => {
         let slackMessage = getBaseMessage(slackChannel, review, color);
-        log.info("**********************   review   *************************");
-        log.info(review);
         const res = slackClient.chat.postMessage(slackMessage);
     });
     /*let slackMessage = getBaseMessage(slackChannel, reviews, color);
