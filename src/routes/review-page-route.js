@@ -41,16 +41,22 @@ module.exports.handleReviewPage = async (context, globalContext) => {
                                 type: 'mrkdwn',
                                 text: `*Score:* ${review.score}\n`,
                             },
-                            {
-                                type: 'mrkdwn',
-                                text: `*Positive:* ${review.positive}\n`,
-                            },
-                            {
-                                type: 'mrkdwn',
-                                text: `*Negative:* ${review.negative}\n`,
-                            },
                         ],
                     },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": `*Positive:* ${review.positive}`,
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": `*Negative:* ${review.negative}`,
+                        }
+                    }
                 ],
             },
         ],
