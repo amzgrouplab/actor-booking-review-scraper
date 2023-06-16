@@ -66,13 +66,13 @@ module.exports.handleReviewPage = async (context, globalContext) => {
 
     let reviews = await extractReviews(page);
 
-    const token = "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5";
-    const slackChannel= "project";
+    const token = "xoxb-5086549358049-5439419378340-NHrVpaMknJIVCJC0hyQ6DYJe";
+    const slackChannel= "reviews";
     const color = '#00cc00';
     const slackClient = new WebClient(token);
     reviews.map((review) => {
         let slackMessage = getBaseMessage(slackChannel, review, color);
-        log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   review");
+        log.info("**********************   review   *************************");
         log.info(review);
         const res = slackClient.chat.postMessage(slackMessage);
     });
