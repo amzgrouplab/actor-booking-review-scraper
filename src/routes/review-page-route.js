@@ -21,7 +21,7 @@ module.exports.handleReviewPage = async (context, globalContext) => {
     const { startUrls, scrapeReviewerName = false } = input;
     const getBaseMessage = (slackChannel, review, color = '#0066ff') => ({
         channel: slackChannel,
-        text:  ":white_check_mark: * New review received",
+        text:  ":white_check_mark: *New review received* ",
         attachments: [
             {
                 color,
