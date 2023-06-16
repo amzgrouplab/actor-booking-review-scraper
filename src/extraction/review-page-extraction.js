@@ -2,44 +2,6 @@ const Apify = require('apify');
 const dotenv = require('dotenv');
 const { log } = Apify.utils;
 const { WebClient, ChatPostMessageArguments } =  require( '@slack/web-api' );
-
-const getBaseMessage = (slackChannel, review, color = '#0066ff') => ({
-    channel: slackChannel,
-    text:  ":white_check_mark: * New review received",
-    attachments: [
-        {
-            color,
-            blocks: [
-                {
-                    type: 'section',
-                    fields: [
-                        {
-                            type: 'mrkdwn',
-                            text: `*Author:* ${review.guestName}\n`,
-                        },
-                        {
-                            type: 'mrkdwn',
-                            text: `*Date:* ${review.date}\n`,
-                        },
-                        {
-                            type: 'mrkdwn',
-                            text: `*Score:* ${review.score}\n`,
-                        },
-                        {
-                            type: 'mrkdwn',
-                            text: `*Positive:* ${review.positive}\n`,
-                        },
-                        {
-                            type: 'mrkdwn',
-                            text: `*Negative:* ${review.negative}\n`,
-                        },
-                    ],
-                },
-            ],
-        },
-    ],
-});
-
 module.exports.extractReviews = async (page) => {
     dotenv.config();
     const extractedReviews = await page.evaluate(() => {
@@ -83,7 +45,43 @@ module.exports.extractReviews = async (page) => {
             const countryCode = countryCodeMatches.length > 1 ? countryCodeMatches[1] : null;
             return countryCode;
         };
-
+        const getBaseMessage = (slackChannel, review, color = '#0066ff') => ({
+            channel: slackChannel,
+            text:  ":white_check_mark: * New review received",
+            attachments: [
+                {
+                    color,
+                    blocks: [
+                        {
+                            type: 'section',
+                            fields: [
+                                {
+                                    type: 'mrkdwn',
+                                    text: `*Author:* ${review.guestName}\n`,
+                                },
+                                {
+                                    type: 'mrkdwn',
+                                    text: `*Date:* ${review.date}\n`,
+                                },
+                                {
+                                    type: 'mrkdwn',
+                                    text: `*Score:* ${review.score}\n`,
+                                },
+                                {
+                                    type: 'mrkdwn',
+                                    text: `*Positive:* ${review.positive}\n`,
+                                },
+                                {
+                                    type: 'mrkdwn',
+                                    text: `*Negative:* ${review.negative}\n`,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        });
+        
         const reviewBlocks = $('.c-review-block');
         const today = new Date();
         const yesterday = new Date(today);
@@ -117,11 +115,14 @@ module.exports.extractReviews = async (page) => {
                     const slackChannel= "project";
                     const color = '#00cc00';
                     const slackClient = new WebClient(token);
+                    log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$slackClient");
+                    log.info(slackClient);
                     let slackMessage = getBaseMessage(slackChannel, review, color);
+                    log.info(slackMessage);
                     const res = slackClient.chat.postMessage(slackMessage);
-            
+                    log.info(res);
                 } catch (error) {
-                    console.log(error);
+                    log.info(error);
                 }
                 return review;
             }
