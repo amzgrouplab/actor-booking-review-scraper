@@ -1,6 +1,3 @@
-const Apify = require('apify');
-const { log } = Apify.utils;
-const { WebClient, ChatPostMessageArguments } =  require( '@slack/web-api' );
 module.exports.extractReviews = async (page) => {
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
@@ -43,42 +40,7 @@ module.exports.extractReviews = async (page) => {
             const countryCode = countryCodeMatches.length > 1 ? countryCodeMatches[1] : null;
             return countryCode;
         };
-        const getBaseMessage = (slackChannel, review, color = '#0066ff') => ({
-            channel: slackChannel,
-            text:  ":white_check_mark: * New review received",
-            attachments: [
-                {
-                    color,
-                    blocks: [
-                        {
-                            type: 'section',
-                            fields: [
-                                {
-                                    type: 'mrkdwn',
-                                    text: `*Author:* ${review.guestName}\n`,
-                                },
-                                {
-                                    type: 'mrkdwn',
-                                    text: `*Date:* ${review.date}\n`,
-                                },
-                                {
-                                    type: 'mrkdwn',
-                                    text: `*Score:* ${review.score}\n`,
-                                },
-                                {
-                                    type: 'mrkdwn',
-                                    text: `*Positive:* ${review.positive}\n`,
-                                },
-                                {
-                                    type: 'mrkdwn',
-                                    text: `*Negative:* ${review.negative}\n`,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            ],
-        });
+
 
         const reviewBlocks = $('.c-review-block');
         const today = new Date();
@@ -107,15 +69,6 @@ module.exports.extractReviews = async (page) => {
                     countryCode: extractCountryCode(el),
                     photos: extractReviewPhotos(el),
                 };
-                try {
-                    const token = "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5";
-                    const slackChannel= "project";
-                    const color = '#00cc00';
-                    const slackClient = new WebClient(token);
-                    let slackMessage = getBaseMessage(slackChannel, review, color);
-                    const res = slackClient.chat.postMessage(slackMessage);
-                } catch (error) {
-                }
                 return review;
             }
         });

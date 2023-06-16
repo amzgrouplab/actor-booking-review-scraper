@@ -5,6 +5,7 @@ const { addReviews, removeProcessedReviewUrl } = require('../global-store');
 const { saveDetailIfComplete, validateProxy, setHtmlDebugValue } = require('../util');
 
 const { log } = Apify.utils;
+const { WebClient, ChatPostMessageArguments } =  require('@slack/web-api');
 
 module.exports.handleReviewPage = async (context, globalContext) => {
     const {
@@ -64,6 +65,7 @@ module.exports.handleReviewPage = async (context, globalContext) => {
     validateProxy(page, session, startUrls, 'label');
 
     let reviews = await extractReviews(page);
+
     const token = "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5";
     const slackChannel= "project";
     const color = '#00cc00';
