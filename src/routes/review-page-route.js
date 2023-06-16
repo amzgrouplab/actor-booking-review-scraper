@@ -72,7 +72,7 @@ module.exports.handleReviewPage = async (context, globalContext) => {
 
     let reviews = await extractReviews(page);
 
-    const token = "xoxb-5086549358049-5439419378340-NHrVpaMknJIVCJC0hyQ6DYJe";
+    const token = "xoxb-5086549358049-5439419378340-7OYZXEemTmvm6YunucCgZJBu";
     const slackChannel= "reviews";
     //const token = "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5";
     //const slackChannel= "project";
