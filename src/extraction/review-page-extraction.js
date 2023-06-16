@@ -1,7 +1,9 @@
 const Apify = require('apify');
+const dotenv = require('dotenv');
 const { log } = Apify.utils;
 const { WebClient, ChatPostMessageArguments } =  require( '@slack/web-api' );
 module.exports.extractReviews = async (page) => {
+    dotenv.config();
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
         const extractReviewTexts = (reviewElement) => {
@@ -79,7 +81,7 @@ module.exports.extractReviews = async (page) => {
                 },
             ],
         });
-        
+
         const reviewBlocks = $('.c-review-block');
         const today = new Date();
         const yesterday = new Date(today);
@@ -90,10 +92,8 @@ module.exports.extractReviews = async (page) => {
             const dateMatches = $(el).find('.c-review-block__date').text().trim();
             const datePortion = dateMatches.split(': ')[1]; // Extract the date portion after the colon
             const dateObject = new Date(Date.parse(datePortion));
-            console.log(reviewBlocks);
             if (dateObject >= yesterday && dateObject <= today) {
                 const reviewTexts = extractReviewTexts(el);
-                log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$review");
 
                 const review = {
                     title: $(el).find('.c-review-block__title').first().text()
