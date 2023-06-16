@@ -1,9 +1,7 @@
 const Apify = require('apify');
-const dotenv = require('dotenv');
 const { log } = Apify.utils;
 const { WebClient, ChatPostMessageArguments } =  require( '@slack/web-api' );
 module.exports.extractReviews = async (page) => {
-    dotenv.config();
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
         const extractReviewTexts = (reviewElement) => {
@@ -114,14 +112,9 @@ module.exports.extractReviews = async (page) => {
                     const slackChannel= "project";
                     const color = '#00cc00';
                     const slackClient = new WebClient(token);
-                    log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$slackClient");
-                    log.info(slackClient);
                     let slackMessage = getBaseMessage(slackChannel, review, color);
-                    log.info(slackMessage);
                     const res = slackClient.chat.postMessage(slackMessage);
-                    log.info(res);
                 } catch (error) {
-                    log.info(error);
                 }
                 return review;
             }
