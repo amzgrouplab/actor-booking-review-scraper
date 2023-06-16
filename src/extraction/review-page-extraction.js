@@ -1,15 +1,45 @@
 const Apify = require('apify');
 const dotenv = require('dotenv');
-const Slack = require('@slack/bolt');
 const { log } = Apify.utils;
+const { WebClient, ChatPostMessageArguments } =  require( '@slack/web-api' );
 
+const getBaseMessage = (slackChannel, review, color = '#0066ff') => ({
+    channel: slackChannel,
+    text:  ":white_check_mark: *New review received*",
+    attachments: [
+        {
+            color,
+            blocks: [
+                {
+                    type: 'section',
+                    fields: [
+                        {
+                            type: 'mrkdwn',
+                            text: `*Author:* ${review.guestName}\n`,
+                        },
+                        {
+                            type: 'mrkdwn',
+                            text: `*Date:* ${review.date}\n`,
+                        },
+                        {
+                            type: 'mrkdwn',
+                            text: `*Score:* ${review.score}\n`,
+                        },
+                        {
+                            type: 'mrkdwn',
+                            text: `*Positive:* ${review.positive}\n`,
+                        },
+                        {
+                            type: 'mrkdwn',
+                            text: `*Negative:* ${review.negative}\n`,
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
+});
 
-
-log.info('------------------------')
-
-log.info(Slack)
-
-log.info('------------------------')
 
 module.exports.extractReviews = async (page) => {
     dotenv.config();
@@ -67,8 +97,6 @@ module.exports.extractReviews = async (page) => {
             const dateObject = new Date(Date.parse(datePortion));
             console.log(reviewBlocks);
             if (dateObject >= yesterday && dateObject <= today) {
-                console.log('************DATE'+ yesterday );
-            
                 const reviewTexts = extractReviewTexts(el);
 
                 const review = {
@@ -85,28 +113,17 @@ module.exports.extractReviews = async (page) => {
                     countryCode: extractCountryCode(el),
                     photos: extractReviewPhotos(el),
                 };
-                const slackApp = new Slack.App({
-                    signingSecret: "501bef0a36af9492d7f8aaaaa5adaed1",
-                    token: "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5",
-                });
-                slackApp.client.chat.postMessage({
-                    token: "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5",
-                    channel: "project",
-                    blocks: [
-                        {
-                            "type": "section",
-                            "text": {
-                                "type": "mrkdwn",
-                                "text": '*Booking.com Review*' +
-                                '\n Date - ' + datePortion +
-                                '\n GuestName - ' + review.guestName +
-                                '\n Score - ' + review.guestName +
-                                '\n Positive - ' + review.positive +
-                                '\n Negative - ' + review.negative,
-                            }
-                        }
-                    ]
-                });
+                try {
+                    const token = "xoxb-5384634643063-5429247221827-IagETGnAj99DUVEQmdI5a4W5";
+                    const slackChannel= "project";
+                    const color = '#00cc00';
+                    const slackClient = new WebClient(token);
+                    let slackMessage = getBaseMessage(slackChannel, review, color);
+                    const res = slackClient.chat.postMessage(slackMessage);
+            
+                } catch (error) {
+                    console.log(error);
+                }
                 return review;
             }
         });
