@@ -25,7 +25,7 @@ module.exports.extractReviews = async (page) => {
 
             return reviewTexts;
         };
-``
+
         const extractReviewPhotos = (reviewElement) => {
             const LARGE_PHOTO_ATTRIBUTE = 'data-photos-large-src';
             const photoElements = $(reviewElement).find(`li.c-review-block__photos__item [${LARGE_PHOTO_ATTRIBUTE}]`);
