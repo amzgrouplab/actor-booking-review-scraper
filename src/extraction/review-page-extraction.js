@@ -45,22 +45,16 @@ module.exports.extractReviews = async (page) => {
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 2);
-        today.setDate(today.getDate() - 1);
-        console.log("**********************   Date   *************************");
-        console.log(yesterday);
-        console.log(today);
+        //today.setDate(today.getDate() - 1);
         const reviews = $.map(reviewBlocks, (el) => {
             // const dateMatches = $(el).find('.c-review-block__date').text().trim()
             //     .match(/([\d]{1,2}(.)+[\d]{4})/gi);
             const dateMatches = $(el).find('.c-review-block__date').text().trim();
             const datePortion = dateMatches.split(': ')[1]; // Extract the date portion after the colon
             const dateObject = new Date(Date.parse(datePortion));
-            console.log("**********************   dateObject   *************************");
-            console.log(dateObject);
-            if (dateObject >= yesterday && dateObject < today) {
+            if (dateObject >= yesterday) {
+           // if (dateObject >= yesterday && dateObject < today) {
                 const reviewTexts = extractReviewTexts(el);
-                console.log("**********************   reviewTexts   *************************");
-                console.log(reviewTexts);
                 const review = {
                     title: $(el).find('.c-review-block__title').first().text()
                         .trim() || null,
