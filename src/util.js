@@ -317,7 +317,7 @@ module.exports.saveDetailIfComplete = async (detailPagename) => {
     log.info('**************saveDetailIfComplete*****************');
     if (store.state.reviewPagesToProcess[detailPagename].length === 0) {
         sliceReviews(detailPagename, store.state.maxReviews);
-
+        log.info('**************saveDetailIfCompletssssssssssssssse*****************');
         log.info('Extracted all reviews, pushing result to the dataset...', { detailPagename });
         await store.pushPathToDataset(`details.${detailPagename}`);
     }
