@@ -108,7 +108,8 @@ const enqueueAllReviewsPages = async (context, detailPagename, reviewsCount, lan
     Enqueuing ${reviewPagesUrls.length} reviews pages (${REVIEWS_RESULTS_PER_REQUEST} reviews per page)...`, { detailPageUrl });
 
     setReviewUrlsToProcess(detailPagename, reviewPagesUrls);
-
+    console.log("*************detailPagename*************");
+    console.log(detailPagename);
     for (let index = 0; index < reviewPagesUrls.length; index++) {
         const url = reviewPagesUrls[index];
         const request = {
