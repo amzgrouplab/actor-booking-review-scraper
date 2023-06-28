@@ -45,14 +45,15 @@ module.exports.handleDetailPage = async (context, globalContext) => {
     log.info('extracting detail...');
     const detail = await extractDetail(page, ld, input, userData);
     log.info('detail extracted');
-
+    log.info(detail);
     const userResult = await getExtendedUserResult(page, extendOutputFunction, input.extendOutputFunction);
+    log.info('****************userResult*************');
+    log.info(userResult);
 
     // If we're scraping reviews as well, we'll store the result into the dataset once it's merged with the reviews.
     if (getMaxReviewsPages() > 0) {
         const detailPagename = getPagename(url);
         addDetail(detailPagename, detail);
-
         const { reviews: reviewsCount } = detail;
         await enqueueAllReviewsPages(context, detailPagename, reviewsCount, language);
 
