@@ -197,7 +197,7 @@ module.exports.extractPreviewReviews = (html, scrapeReviewerName) => {
         .replace(/( )+/g, ' '); // replace multiple whitespaces with 1 whitespace;
 
     vm.runInContext(jsonParseCode, context);
-
+    console.log(context);
     const { exportedVars } = context;
 
     const { fe_featured_reviews: featuredReviews } = exportedVars;
