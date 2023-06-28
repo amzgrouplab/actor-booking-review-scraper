@@ -86,14 +86,14 @@ module.exports.handleReviewPage = async (context, globalContext) => {
     log.info(today);
     log.info(yesterday);
 
-    /*reviews.map((review) => {
+    reviews.map((review) => {
         const reviewDate = new Date(Date.parse(review.date));
         log.info(reviewDate);
         if(reviewDate >= yesterday && reviewDate < today) {
             let slackMessage = getBaseMessage(slackChannel, review, color);
             const res = slackClient.chat.postMessage(slackMessage);
         }
-    });*/
+    });
     // reviews.map((review) => {
     //     let slackMessage = getBaseMessage(slackChannel, review, color);
     //     const res = slackClient.chat.postMessage(slackMessage);
