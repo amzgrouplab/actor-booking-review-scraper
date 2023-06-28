@@ -82,7 +82,7 @@ module.exports.handleReviewPage = async (context, globalContext) => {
     log.info(reviews);
     const today = new Date();
     const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 3);
+    yesterday.setDate(yesterday.getDate() - 2);
     log.info(today);
     log.info(yesterday);
 
