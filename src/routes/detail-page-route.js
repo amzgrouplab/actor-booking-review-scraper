@@ -61,7 +61,8 @@ module.exports.handleDetailPage = async (context, globalContext) => {
         // Store userReviews extracted directly from detail page only if no reviews are scraped from extra requests.
         const html = await page.content();
         const store = GlobalStore.summon();
-
+        console.log("***************html***************");
+        console.log(html);
         const previewReviews = extractPreviewReviews(html, scrapeReviewerName);
         const userReviews = previewReviews.slice(0, store.state.maxReviews);
 
