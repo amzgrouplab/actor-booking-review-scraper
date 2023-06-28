@@ -40,19 +40,19 @@ module.exports.extractReviews = async (page) => {
             const countryCode = countryCodeMatches.length > 1 ? countryCodeMatches[1] : null;
             return countryCode;
         };
-
+        
         const reviewBlocks = $('.c-review-block');
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 2);
-        //today.setDate(today.getDate() - 1);
+        today.setDate(today.getDate() - 1);
         const reviews = $.map(reviewBlocks, (el) => {
             // const dateMatches = $(el).find('.c-review-block__date').text().trim()
             //     .match(/([\d]{1,2}(.)+[\d]{4})/gi);
             const dateMatches = $(el).find('.c-review-block__date').text().trim();
             const datePortion = dateMatches.split(': ')[1]; // Extract the date portion after the colon
             const dateObject = new Date(Date.parse(datePortion));
-            if (dateObject == yesterday) {
+            //if (dateObject < today) {
            // if (dateObject >= yesterday && dateObject < today) {
                 const reviewTexts = extractReviewTexts(el);
                 const review = {
@@ -70,7 +70,7 @@ module.exports.extractReviews = async (page) => {
                     photos: extractReviewPhotos(el),
                 };
                 return review;
-            }
+            //}
         });
 
         return reviews;
