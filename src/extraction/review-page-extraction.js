@@ -1,6 +1,3 @@
-const Apify = require('apify');
-const { log } = Apify.utils;
-
 module.exports.extractReviews = async (page) => {
     const extractedReviews = await page.evaluate(() => {
         const $ = window.jQuery;
@@ -28,7 +25,7 @@ module.exports.extractReviews = async (page) => {
 
             return reviewTexts;
         };
-
+``
         const extractReviewPhotos = (reviewElement) => {
             const LARGE_PHOTO_ATTRIBUTE = 'data-photos-large-src';
             const photoElements = $(reviewElement).find(`li.c-review-block__photos__item [${LARGE_PHOTO_ATTRIBUTE}]`);
@@ -44,11 +41,10 @@ module.exports.extractReviews = async (page) => {
             return countryCode;
         };
 
-
         const reviewBlocks = $('.c-review-block');
         const today = new Date();
         const yesterday = new Date(today);
-        yesterday.setDate(yesterday.getDate() - 1);
+        yesterday.setDate(yesterday.getDate() - 10);
         console.log("**********************   Date   *************************");
         console.log(yesterday);
         console.log(today);
