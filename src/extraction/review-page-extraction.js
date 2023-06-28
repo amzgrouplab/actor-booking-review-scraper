@@ -45,7 +45,7 @@ module.exports.extractReviews = async (page) => {
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 2);
-        today.setDate(yesterday.getDate() - 1);
+        today.setDate(today.getDate() - 1);
         console.log("**********************   Date   *************************");
         console.log(yesterday);
         console.log(today);
